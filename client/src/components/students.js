@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Form from "./form";
 
 function Students() {
 
@@ -19,6 +20,24 @@ function Students() {
         
     }, []);
 
+    const postStudent = (newStudent) => {
+          fetch('http://localhost:5000/api/students', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'}, 
+          body: JSON.stringify(newStudent)
+        }).then((response) => {
+            response.json()
+        }).then((data) => 
+        console.log("From the post ", data)
+        )
+      }
+
+    const addStudent = (newStudent) => {
+        //console.log(newStudent);
+        postStudent(newStudent);
+        setStudents((students) => [...students, newStudent]);
+    }
+
 
     return (
       <div className="students">
@@ -27,6 +46,7 @@ function Students() {
             {students.map(student =>
                 <li key={student.id}> {student.firstName} {student.lastName}</li>)}
         </ul>
+        <Form addStudent={addStudent} />
       </div>
     );
   }
