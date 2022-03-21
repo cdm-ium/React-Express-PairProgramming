@@ -20,21 +20,11 @@ function Students() {
         
     }, []);
 
-    const postStudent = (newStudent) => {
-          fetch('http://localhost:5000/api/students', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'}, 
-          body: JSON.stringify(newStudent)
-        }).then((response) => {
-            response.json()
-        }).then((data) => 
-        console.log("From the post ", data)
-        )
-      }
+    
 
     const addStudent = (newStudent) => {
         //console.log(newStudent);
-        postStudent(newStudent);
+        //postStudent(newStudent);
         setStudents((students) => [...students, newStudent]);
     }
 
@@ -44,7 +34,7 @@ function Students() {
         <h2> List of Students </h2>
         <ul>
             {students.map(student =>
-                <li key={student.id}> {student.firstName} {student.lastName}</li>)}
+                <li key={student.id}> {student.firstname} {student.lastname}</li>)}
         </ul>
         <Form addStudent={addStudent} />
       </div>

@@ -23,12 +23,25 @@ const Form = (props) => {
     const handleIdChange = (event) => {
         const id = event.target.value;
         setStudent((student) => ({ ...student, id }));
+    }
 
+    //A function to handle the post request
+    const postStudent = (newStudent) => {
+        fetch('http://localhost:5000/api/students', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify(newStudent)
+      }).then((response) => {
+          response.json()
+      }).then((data) => 
+      console.log("From the post ", data)
+      )
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        props.addStudent(student)
+        postStudent(student);
+        props.addStudent(student);
 
     };
 
