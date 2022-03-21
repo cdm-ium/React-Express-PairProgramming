@@ -45,6 +45,15 @@ app.post('/api/students', cors(), async (req, res) => {
     res.json(result.rows[0]);
 });
 
+// delete request
+app.delete('/api/students/:studentId', cors(), async (req, res) =>{
+    const studentId = req.params.studentId;
+    //console.log(req.params);
+    await db.query('DELETE FROM students WHERE id=$1', [studentId]);
+    res.status(200).end();
+
+});
+
 // console.log that your server is up and running
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
