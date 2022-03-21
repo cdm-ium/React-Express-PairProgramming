@@ -2,47 +2,42 @@ import { useState } from "react";
 
 const Form = (props) => {
     const [student, setStudent] = useState({
-        id: "",
-        firstName: "",
-        lastName: ""
+        firstname: "",
+        lastname: ""
     });
 
     //create functions that handle the event of the user typing into the form
     const handleNameChange = (event) => {
-        const firstName = event.target.value;
-        setStudent((student) => ({ ...student, firstName }));
+        const firstname = event.target.value;
+        setStudent((student) => ({ ...student, firstname }));
 
     }
 
-    const handleLastNameChange = (event) => {
-        const lastName = event.target.value;
-        setStudent((student) => ({ ...student, lastName }));
+    const handleLastnameChange = (event) => {
+        const lastname = event.target.value;
+        setStudent((student) => ({ ...student, lastname }));
 
-    }
-
-    const handleIdChange = (event) => {
-        const id = event.target.value;
-        setStudent((student) => ({ ...student, id }));
     }
 
     //A function to handle the post request
     const postStudent = (newStudent) => {
-        fetch('http://localhost:5000/api/students', {
+        return fetch('http://localhost:5000/api/students', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify(newStudent)
       }).then((response) => {
-          response.json()
-      }).then((data) => 
-      console.log("From the post ", data)
-      )
+          return response.json()
+      }).then((data) => {
+        console.log("From the post ", data);
+        props.addStudent(data);
+      
+    });
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         postStudent(student);
-        props.addStudent(student);
-
+        
     };
 
     return (
@@ -61,21 +56,11 @@ const Form = (props) => {
                 <label>Last Name</label>
                 <input
                     type="text"
-                    id="add-user-lastName"
-                    placeholder="LastName"
+                    id="add-user-lastname"
+                    placeholder="Last Name"
                     required
-                    value={student.lastName}
-                    onChange={handleLastNameChange}
-                />
-
-                <label>ID</label>
-                <input
-                    type="number"
-                    id="add-user-id"
-                    placeholder="Id"
-                    required
-                    value={student.id}
-                    onChange={handleIdChange}
+                    value={student.lastname}
+                    onChange={handleLastnameChange}
                 />
             </fieldset>
             <button type="submit">Add</button>

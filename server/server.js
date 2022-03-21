@@ -35,9 +35,14 @@ app.get('/api/students', cors(), async (req, res) => {
 
 //create the POST request
 app.post('/api/students', cors(), async (req, res) => {
-    let newUser = { id: req.body.id, firstName: req.body.name, lastName: req.body.lastName }
-    console.log(req.body);
-    res.json({ success: true });
+    const newUser = { firstname: req.body.firstname, lastname: req.body.lastname }
+    console.log([newUser.firstname, newUser.lastname]);
+    const result = await db.query(
+        'INSERT INTO students(firstname, lastname) VALUES($1, $2) RETURNING *',
+        [newUser.firstname, newUser.lastname]
+    );
+    console.log(result.rows[0]);
+    res.json(result.rows[0]);
 });
 
 // console.log that your server is up and running
