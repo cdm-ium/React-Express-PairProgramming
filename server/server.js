@@ -1,21 +1,24 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config()
 const db = require('../server/db/db-connection.js'); 
-
+const REACT_BUILD_DIR = path.join(__dirname, '..', 'client', 'build');
 const app = express();
+app.use(express.static(REACT_BUILD_DIR));
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
 //creates an endpoint for the route /api
 app.get('/', (req, res) => {
-    res.json({ message: 'Hello from My ExpressJS' });
+    res.sendFile(path.join(REACT_BUILD_DIR, 'index.html'));
 });
 
 //create the get request
 app.get('/api/students', cors(), async (req, res) => {
+    
     // const STUDENTS = [
 
     //     { id: 1, firstName: 'Lisa', lastName: 'Lee' },
@@ -29,6 +32,7 @@ app.get('/api/students', cors(), async (req, res) => {
         const { rows: students } = await db.query('SELECT * FROM students');
         res.send(students);
     } catch (e){
+        console.log(e);
         return res.status(400).json({e});
     }
 });

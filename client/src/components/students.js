@@ -6,7 +6,7 @@ function Students() {
     const [students, setStudents] = useState([]);
 
     const loadStudents = () => {
-        fetch("http://localhost:5000/api/students")
+        fetch("/api/students")
             .then((response) => response.json())
             .then(students => {
                 setStudents(students);
@@ -18,7 +18,7 @@ function Students() {
     }, []);
 
     const onDelete = (student) => {
-        return fetch(`http://localhost:5000/api/students/${student.id}`, {
+        return fetch(`/api/students/${student.id}`, {
             method: "DELETE"
         }).then((response) =>{
             //console.log(response);
