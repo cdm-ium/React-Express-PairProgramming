@@ -1,13 +1,11 @@
 FROM node:16.13.2-alpine
 
-WORKDIR /app
-ADD server ./
+WORKDIR /client
 ADD client ./
-
-WORKDIR /app/client
 RUN npm install
 RUN npm run build
 
-WORKDIR /app/server
+WORKDIR /server
+ADD server ./
 RUN npm install
-CMD npm start
+CMD node server.js
