@@ -1,10 +1,14 @@
 import { useState } from "react";
 
 const Form = (props) => {
-    const [student, setStudent] = useState({
-        firstname: "",
-        lastname: ""
-    });
+    // Initial student in case that you want to update a new student
+    const {initialStudent = {id: null, 
+                            firstname: "", 
+                            lastname: ""}} = props;
+
+
+    // We're using that initial student as our initial state                       
+    const [student, setStudent] = useState(initialStudent);
 
     //create functions that handle the event of the user typing into the form
     const handleNameChange = (event) => {
@@ -29,14 +33,35 @@ const Form = (props) => {
           return response.json()
       }).then((data) => {
         console.log("From the post ", data);
-        props.addStudent(data);
+        props.saveStudent(data);
       
     });
     }
 
+    //a function to handle the Update request
+    const updateStudent = (existingStudent) =>{
+        return fetch(`/api/students/${existingStudent.id}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(existingStudent)
+          }).then((response) => {
+              return response.json()
+          }).then((data) => {
+            console.log("From put request ", data);
+            props.saveStudent(data);
+          
+        });
+
+    }
+
+    // Than handle submit function now needs the logic for the update scenario 
     const handleSubmit = (e) => {
         e.preventDefault();
-        postStudent(student);
+        if(student.id){
+            updateStudent(student);
+        } else {
+            postStudent(student);
+        } 
         
     };
 
@@ -49,7 +74,7 @@ const Form = (props) => {
                     id="add-user-name"
                     placeholder="First Name"
                     required
-                    value={student.name}
+                    value={student.firstname}
                     onChange={handleNameChange}
 
                 />
@@ -63,7 +88,8 @@ const Form = (props) => {
                     onChange={handleLastnameChange}
                 />
             </fieldset>
-            <button type="submit">Add</button>
+            
+            <button type="submit">{!student.id ? "Add" : "Save"}</button>
         </form>
     );
 };
