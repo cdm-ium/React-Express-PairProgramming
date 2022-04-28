@@ -83,7 +83,15 @@ app.put('/api/students/:studentId', cors(), async (req, res) =>{
 app.get('/test-dino', cors(), async (req, res) => {
     console.log('hi');
     console.log('env ', process.env);
-    // const result = axios.get()
+    const result = await axios.get(
+        'https://api.calorieninjas.com/v1/nutrition?query=onion', 
+        {
+            headers: {
+                'X-Api-Key': process.env.CALORIE_NINJA_API_KEY,
+            },
+        }
+    )
+    console.log('result ', result);
 
     res.status(200).end('ok');
 });
