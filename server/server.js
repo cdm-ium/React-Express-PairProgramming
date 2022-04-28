@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const axios = require('axios');
 require('dotenv').config()
 const db = require('../server/db/db-connection.js'); 
 const REACT_BUILD_DIR = path.join(__dirname, '..', 'client', 'build');
@@ -77,6 +78,22 @@ app.put('/api/students/:studentId', cors(), async (req, res) =>{
         console.log(e);
         return res.status(400).json({e});
     }
+});
+
+app.get('/test-dino', cors(), async (req, res) => {
+    console.log('hi');
+    console.log('env ', process.env);
+    const result = await axios.get(
+        'https://api.calorieninjas.com/v1/nutrition?query=onion', 
+        {
+            headers: {
+                'X-Api-Key': process.env.CALORIE_NINJA_API_KEY,
+            },
+        }
+    )
+    console.log('result ', result);
+
+    res.status(200).end('ok');
 });
 
 // console.log that your server is up and running
